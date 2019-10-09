@@ -1,0 +1,15 @@
+Simplified messenger by Wikwoj0512
+
+to install requirements:
+
+>py -m pip -r install requirements
+
+to run code:
+
+>py official_v1.py
+from right directory
+
+select the conversation by ^ and than the number from list or thread id (16 digit)
+^exit to go to the conversations list
+^end to completely leave app
+
