@@ -37,29 +37,33 @@ def send():
     if text[0]=='^':
         if len(text[1:])==16:
             try:
+                messages=[]
                 current=client.fetchThreadInfo(text[1:])[text[1:]]
-                if current.name in threadsupdate: threadsupdate.remove(current)
+                if current.name in threadsupdate: threadsupdate.remove(current.name)
                 if current.type==ThreadType.USER:
                     threadusers[current.uid]=current.name
                 else:
                     for user in client.fetchAllUsersFromThreads([current]):
                         threadusers[user.uid]=user.name
                 threadusers[client.uid] = "You"
-                messages = False
+                messages = client.fetchThreadMessages(thread_id=current.uid, limit=25)
+                messages.reverse()
                 print("dolaczono")
             except:
                 print("nie znaleziono wątku")
         elif len(text[1:])<3:
             try:
+                messages=[]
                 current=client.fetchThreadList(limit=20)[int(text[1:])]
-                if current.name in threadsupdate: threadsupdate.remove(current)
+                if current.name in threadsupdate: threadsupdate.remove(current.name)
                 if current.type==ThreadType.USER:
                     threadusers[current.uid]=current.name
                 else:
                     for user in client.fetchAllUsersFromThreads([current]):
                         threadusers[user.uid]=user.name
                 threadusers[client.uid]="You"
-                messages = False
+                messages = client.fetchThreadMessages(thread_id=current.uid, limit=25)
+                messages.reverse()
                 print("dolaczono")
 
             except:
@@ -81,7 +85,7 @@ def onmessage(message_object, author_id, thread_id, thread_type):
     thread=client.fetchThreadInfo(thread_id)[thread_id]
     if messageslast:
         messageslast[thread.uid] = message_object.text
-    if current.name in threadsupdate: threadsupdate.remove(current)
+    if current.name in threadsupdate: threadsupdate.remove(current.name)
     if thread.name not in threadsupdate and thread_id!=current.uid:
         threadsupdate.append(thread.name)
     if current!=0:
