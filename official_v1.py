@@ -38,7 +38,7 @@ def send():
         if len(text[1:])==16:
             try:
                 current=client.fetchThreadInfo(text[1:])[text[1:]]
-                if current in threadsupdate: threadsupdate.remove(current)
+                if current.name in threadsupdate: threadsupdate.remove(current)
                 if current.type==ThreadType.USER:
                     threadusers[current.uid]=current.name
                 else:
@@ -52,7 +52,7 @@ def send():
         elif len(text[1:])<3:
             try:
                 current=client.fetchThreadList(limit=20)[int(text[1:])]
-                if current in threadsupdate: threadsupdate.remove(current)
+                if current.name in threadsupdate: threadsupdate.remove(current)
                 if current.type==ThreadType.USER:
                     threadusers[current.uid]=current.name
                 else:
@@ -81,6 +81,7 @@ def onmessage(message_object, author_id, thread_id, thread_type):
     thread=client.fetchThreadInfo(thread_id)[thread_id]
     if messageslast:
         messageslast[thread.uid] = message_object.text
+    if current.name in threadsupdate: threadsupdate.remove(current)
     if thread.name not in threadsupdate and thread_id!=current.uid:
         threadsupdate.append(thread.name)
     if current!=0:
